@@ -3,7 +3,6 @@ import numpy as np
 import random
 import collections
 import time 
-#from collections import Counter
 
 start = time.time() #Start a timer.
 
@@ -19,7 +18,7 @@ opening_lands = []          #List for the number of lands in each normal opening
 bo1_opening_lands = []      #List for the number of lands in each MtGA Bo1 opening hand.
 
 data = "/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Data/" #Directory to store saved data.
-save_data = 1               #Boolean to decide whether or not to save data. 1 = save data.
+save_data = 0               #Boolean to decide whether or not to save data. 1 = save data.
 
 def draw(lands = 17, n = 1):
     drawn_cards = random.sample(decks[lands],n)
@@ -129,6 +128,7 @@ print("bo1_openers = ", bo1_openers)
 
 #Save the results in numpy arrays if desired.
 if save_data == 1:
+    print("Data saved to ",data)
     np.save(data + "Normal_Openers", normal_openers)
     np.save(data + "Bo1_Openers", bo1_openers)
 
