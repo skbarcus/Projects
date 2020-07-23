@@ -175,12 +175,20 @@ plt.show()
 ###
 curve_probs = []
 temp = []
+p = 0
 for i in range(1,4):
     temp.clear()
     for j in range(2,7):
-        hpd = ss.hypergeom(deck_size-nopener, 17-i, j)
-        p = hpd.pmf(j-i)
-        temp.append(p)
+        hpd = ss.hypergeom(deck_size-nopener, 17-i, j-1)
+        for k in range(0,i):
+            p = p + hpd.pmf(j-i+k)
+            print("i, j, k, p = ",i,"",j,"",k,"",p)
+            print("j-i+k = ",j-i+k,"hpd.pmf(j-i+k)",hpd.pmf(j-i+k))
+        if i>=j:
+            temp.append(1.)
+        else:
+            temp.append(p)
+        p = 0
     temp_arr = np.array(temp)
     curve_probs.append(temp_arr)
 
@@ -188,12 +196,12 @@ curve_probs = np.array(curve_probs)
 print(curve_probs)
 
 M = 33  # Total number of cards after drawing opening 7.
-n = 15  # Number of lands left in deck.
-N = 2   # Number of draws to find a land.
-k = 1   # Number of lands we want to draw.
+n = 14  # Number of lands left in deck.
+N = 4   # Number of draws to find a land.
+k = 4   # Number of lands we want to draw.
 import scipy.stats as ss
 hpd = ss.hypergeom(M, n, N)
-p = hpd.pmf(k)
+p = hpd.pmf(k)+hpd.pmf(4)
 print("Probability of drawing one land = ",p)
 """
 M_start = 40  # Total number of cards after drawing opening 7.
