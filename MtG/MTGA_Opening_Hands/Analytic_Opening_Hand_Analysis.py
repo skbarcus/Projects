@@ -2,15 +2,18 @@ from matplotlib import pyplot as plt
 import numpy as np
 import random
 import collections
-import time 
+import time
+import scipy.stats as ss #Has hypergeometric calculator.
 
 start = time.time() #Start a timer.
 
 minlands = 14
 maxlands = 20
+deck_size = 40
+nopener = 7
 
-Normal_Openers = np.load("/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Data/Normal_Openers.npy")
-Bo1_Openers = np.load("/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Data/Bo1_Openers.npy")
+Normal_Openers = np.load("/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Data/Analytic_Normal_Openers.npy")
+Bo1_Openers = np.load("/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Data/Analytic_Bo1_Openers.npy")
 
 #Create smaller array for the table of results. 
 norm_results = []
@@ -18,26 +21,17 @@ bo1_results = []
 temp1 = []
 temp2 = []
 for i in range(minlands,maxlands+1):
-    temp1.clear()
-    temp2.clear()
-    for j in range(0,len(Normal_Openers[1])):
-        if(j>1 and (j % 2 == 1)):
-            temp1.append(Normal_Openers[i][j])
-            temp2.append(Bo1_Openers[i][j])
-    temp1_arr = np.array(temp1)
-    temp2_arr = np.array(temp2)
-    print(temp2_arr)
-    norm_results.append(temp1_arr)
-    norm_results.append(temp2_arr)
+    norm_results.append(Normal_Openers[i])
+    norm_results.append(Bo1_Openers[i])
 
 #print(Normal_Openers[16])
 #print(Normal_Openers[17])
-print(Bo1_Openers[16])
-print(Bo1_Openers[17])
+#print(Bo1_Openers[16])
+#print(Bo1_Openers[17])
 norm_results = np.array(norm_results)
 #Ensure just two decimal places.
-norm_results = [['%.2f' % j for j in i] for i in norm_results]
-print(norm_results)
+#norm_results = [['%.2f' % j for j in i] for i in norm_results]
+#print(norm_results)
 
 ###
 #Main results table.
@@ -71,7 +65,7 @@ for i in range(0,len(rows)):
             colors_temp2.append("orange")
         #colors_temp2 = np.array(colors_temp2)
         colors.append(colors_temp2)
-
+#print(colors)
 col_colors = []
 row_colors = []
 for i in range(0,len(rows)):
@@ -176,15 +170,32 @@ plt.show()
 #End combined results table.
 ###
 
+###
+#40 card deck with 17 lands probabilities of having x lands on turn x with y lands in opener. 
+###
+curve_probs = []
+temp = []
+for i in range(1,4):
+    temp.clear()
+    for j in range(2,7):
+        hpd = ss.hypergeom(deck_size-nopener, 17-i, j)
+        p = hpd.pmf(j-i)
+        temp.append(p)
+    temp_arr = np.array(temp)
+    curve_probs.append(temp_arr)
+
+curve_probs = np.array(curve_probs)
+print(curve_probs)
+
 M = 33  # Total number of cards after drawing opening 7.
 n = 15  # Number of lands left in deck.
-N = 1   # Number of draws to find a land.
+N = 2   # Number of draws to find a land.
 k = 1   # Number of lands we want to draw.
 import scipy.stats as ss
 hpd = ss.hypergeom(M, n, N)
 p = hpd.pmf(k)
 print("Probability of drawing one land = ",p)
-
+"""
 M_start = 40  # Total number of cards after drawing opening 7.
 n_start = 17  # Number of lands left in deck.
 N_start = 7   # Number of draws to find a land.
@@ -192,5 +203,5 @@ k_start = 7   # Number of lands we want to draw.
 hpd_start = ss.hypergeom(M_start, n_start, N_start)
 p_start = hpd_start.pmf(k_start)
 print("Probability of drawing 3 land in opening hand = ",p_start)
-
+"""
 print("The script took %.2f seconds (%.2f minutes or %.2f hours) to run." % (time.time() - start, (time.time() - start)/60.,(time.time() - start)/60./60.)) #Print time to run.
