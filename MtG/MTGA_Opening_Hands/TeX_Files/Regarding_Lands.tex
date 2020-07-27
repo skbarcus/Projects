@@ -113,302 +113,34 @@ Once you have decided how many lands your limited deck should run you draw your 
 
 To answer these questions you need to know your deck and how it is trying to win. You need to know how your game plan influences the number of lands you want to draw and when you want to draw them. No amount of tables and graphs can replace the hard-won experience earned from slinging spells against clever opponents. This document contains the statistics governing the answers to many of the above questions. This document cannot, however, answer these questions for you. Instead this document aims to give you the foundational statistical tools you need to make informed decisions regarding lands in limited.
 
-\section{The Rise of the MTGA Best of One Shuffler}
+\section{The MTGA Best of One Shuffler}
 \label{sec:computers_overview}
 
-The number of people playing MtG digitally has greatly increased with the release of Magic the Gathering Arena. With the advent of MTGA came a new emphasis on best-of-one (Bo1) games. With these MTGA Bo1 games Wizard's introduced the Bo1 shuffler to reduce the number of non-interactive games. Unlike in traditional Bo3 games, MTGA Bo1 games draws two opening seven card hands from your deck when a game begins. The Bo1 shuffler then calculates which of these two hands to keep based on which of the hands has a land ratio closest to that of your deck overall. MTGA then presents you with the hand with the closer land ratio to that of your deck as your opening hand. (Note: You never see the other hand.)
+The number of people playing MtG digitally has greatly increased with the release of Magic the Gathering Arena. With the advent of MTGA came a new emphasis on best-of-one (Bo1) games. For these MTGA Bo1 games, Wizard's introduced the Bo1 shuffler to reduce the number of non-interactive games. Unlike in traditional Bo3 games, MTGA Bo1 games draws two opening seven card hands from your deck when a game begins. The Bo1 shuffler then calculates which of these two hands to keep based on which of the hands has a land ratio closest to that of your deck overall. MTGA then presents you with the hand with the closer land ratio to that of your deck as your opening hand. (Note: You never see the other hand.)
 
-For example, if we have a 40 card limited deck with 17 lands in it our deck is 42.5\% (17/40) lands. Now assume the Bo1 shuffler draws one hand with two lands and five nonlands and one hand with three lands and four nonlands. The first hand is 28.6\% (2/7) lands and the second hand is 42.9\% (3/7) lands. In this case the Bo1 shuffler with select the second hand with three lands in it because it is 42.9\% lands which is closer to the deck's land ratio of 42.5\% than the two land hand's 28.6\%. 
+For example, if we have a 40 card limited deck with 17 lands in it our deck is 42.5\% (17/40) lands. Now assume the Bo1 shuffler draws one hand with two lands and five nonlands and one hand with three lands and four nonlands. The first hand is 28.6\% (2/7) lands and the second hand is 42.9\% (3/7) lands. In this case the Bo1 shuffler will select the second hand with three lands in it because 42.9\% lands is closer to the deck's land ratio of 42.5\% than the two land hand's 28.6\%. 
 
-The theory behind the Bo1 shuffler is that you will have more opening hands closer to your deck's land land percentage. This greatly reduces the variance in opening hands, which leads to more keepable opening hands, and hopefully more fun interactive games of Magic. This has led to the belief among many players that it is better to default to 16 lands in limited when playing Bo1 games.
+The theory behind the Bo1 shuffler is that you will have more opening hands closer to your deck's land percentage. This greatly reduces the variance in opening hands, which leads to more keepable opening hands, and hopefully more fun interactive games of Magic. This has led to the belief among many players that it is better to default to playing 16 lands in limited when playing Bo1 games. 
 
-	\begin{figure}[!ht]
-	\begin{center}
-	\includegraphics[width=0.6\linewidth]{/home/skbarcus/JLab/SBS/HCal/Documents/NIM_Paper/pictures/Rosenbluth_vs_Polarized_FFs_Clean.png}
-	\end{center}
-	\caption{
-	{\bf{Ratio of Proton's Sachs Form Factors, $R_p(Q^2)$.}} The dotted line at unity indicates adherence to dipole form factors. The solid and dashed lines are fits to the data. The experiments listed in the top half of the image are unpolarized Rosenbluth separations, and the experiments in the lower half of the image used polarization techniques. Image from \cite{cisbani_2014}***need clearer image or maybe the ones from other paper.}
-	\label{fig:polarization_vs_rosenbluth}
-	\end{figure}	
+The argument goes that running 17 lands in a 40 card deck leads to drawing more lands over the whole game than desired (flooding). The traditional reason to run 17 lands in limited is for color considerations and to make certain that one hits one's important land drops on curve (i.e. having three lands on turn three). But if the Bo1 shuffler causes us to draw more three land opening hands, even with only 16 lands in a deck, then the risk of not hitting land drops on curve is greatly reduced, and one can play fewer lands to prevent late game flood. This document will present statistics for Bo1 opening hands as well as traditional opening hands so that readers can make an informed decision when deciding how many lands to run.
 
- 
-\chapter{The Hadron Calorimeter for the Hall A SBS Program}
+\chapter{Results and Analysis}
+\label{results}
 
-The Hadron Calorimeter (HCal or HCAL-J) is a sampling calorimeter designed to measure the energy of several GeV protons and neutrons. It will be used for measuring hadron energy and triggering purposes in the upcoming Super BigBite Spectrometer (SBS) program to study nucleon form factors. HCal consists of 288 individual modules arranged in 12 columns and 24 rows as shown in Figure \ref{fig:HCal}. These modules are spread across four craneable subassemblies, and the detector weighs approximately 40 tons in total. Each module is made up of 40 layers of 1 cm thick scintillator (PPO only, 2,5-Diphenyloxazole) alternating with 40 layers of 1.5 cm thick iron absorbers as shown in Figure \ref{fig:HCal_interior}, and each module measures 15$\times$15 cm$^2$ with a length of 1 m. The hadrons strike the iron causing them to shower, and the scintillators produce photons from these shower particles. In the center of the iron and scintillators is a St. Gobain BC-484 wavelength shifter (decay time 3 ns) which improves light collection efficiency and uniformity \cite{brio_2018}. The photons in the wavelength shifter are transported to photomultiplier tubes (PMTs) on one end of the modules via custom built light guides that can be seen in the lower image of Figure \ref{fig:HCal_interior}.\\
+The values given in the following tables and plots are analytic\footnote{Tables and plots were produced with Python, SciPi, NumPy, Matplotlib, and Seaborn.}, however the opening hand alnd percentages were cross checked against a Monte Carlo simulation as a sanity check. The two methods were found to be in good agreement. When using these results remember, every decision you make must be made with the composition of your deck in mind. Only when you understand the game plan of your deck can statistics help you to make an informed decision.
+
+\section{Opening Hand Land Statistics}
+\label{opener}
+
+The most fundamental statistic governing the number of lands to put in a deck is the average number of lands you can expect to draw in an opening hand. Figure \ref{fig:opening_hand_percentages} shows the percentage of seven card hands that will have a given number of lands in them for 40 card limited deck. The values are given for decks with between 14 and 20 lands, as well as for traditional draws and Bo1 draws.  
 
 	\begin{figure}[!ht]
-	\begin{center}
-	\includegraphics[width=0.4\linewidth]{/home/skbarcus/JLab/SBS/HCal/Documents/NIM_Paper/pictures/HCal_External_Clean.png}
-	\end{center}
+	\centering
+	\centerline{\includegraphics[width=1.5\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_Opening_Land_Percentages_Clean.png}}
 	\caption{
-	{\bf{SBS Hadron Calorimeter.}} HCal is composed of 288 PMT modules divided into four separate subassemblies which can be moved by crane (total weight $\approx$40 tons). The fully assembled HCal will have 12 columns and 24 rows of modules with PMTs attached. Image from \cite{brio_2018}.}
-	\label{fig:HCal}
+	{\bf{Average Opening Hand Land Percentages.}} .}
+	\label{fig:opening_hand_percentages}
 	\end{figure}	
-	
-	\begin{figure}[!ht]
-	\begin{center}
-	\includegraphics[width=0.65\linewidth]{/home/skbarcus/JLab/SBS/HCal/Documents/NIM_Paper/pictures/HCal_Interior_Clean.png}
-	\includegraphics[width=0.85\linewidth]{/home/skbarcus/JLab/SBS/HCal/Documents/NIM_Paper/pictures/HCal_Interior_Light_Guide_Clean.png}
-	\end{center}
-	\caption{
-	{\bf{SBS Hadron Calorimeter Module Interior.}} The interior of each HCal module is comprised of alternating layers of iron absorbers and scintillators. The hadrons shower in the iron and then these showers create photons in the scintillators. These photons pass through a wavelength shifter before being transported into the PMTs via light guides. Image from \cite{brio_2018}.}
-	\label{fig:HCal_interior}
-	\end{figure}	
-
-
-\chapter{Computers}
-\label{ch:computers}
-\section{Overview}
-\label{sec:computers_overview}
-
-Numerous computers are employed to operate the HCal. Currently they are enpcamsonne and intelsbshcal1 on the daq account and intelsbshcal2 on the adaq account. The main PC used to run CODA and analysis scripts is enpcamsonne. The readout controllers (ROCs) that control each of the two crates containing the F1TDCs and fADCs are intelsbshal1 and intelsbshcal2. These contain the readout lists (ROLs) that CODA downloads to control the F1TDCs and fADCs. The lower VXS crate is ROC21 and is controlled by intelsbshcal1 and the upper VME64x crate is ROC22 and is controlled by intelsbshcal2.\\
-
-\textbf{\large{Note:}} 
-Passwords may not be written down or transmitted electronically so they are not listed in this document. To learn them please contact someone who knows such as Scott Barcus, Alexandre Camsonne, or Bob Michaels.
-
-\section{Logging On}
-\label{sec:logging_on}
-
-\textbf{\large{enpcamsonne:}}
-\begin{enumerate}
-	\item This PC is located in RR5 which is a rack containing only this PC and two monitors.
-	\item Wake the PC and select the daq account.
-	\item Input the password for the daq account then you will have access to this PC.
-\end{enumerate}
-
-\textbf{\large{intelsbshcal1 \& intelsbshcal2:}}
-\begin{enumerate}
-	\item First log on to enpcamsonne as described above.
-	\item On enpcamsonne open a terminal and type ``ssh -Y daq@intelsbshcal1" for intelsbshcal1 (ROC21/lower VXS crate) or ``ssh -Y adaq@intelsbshcal2" for intelsbshcal2 (ROC22/upper VXS crate).
-	\item Input the password for either the daq or adaq account accordingly then you will have access to the ROC containing the ROLs.
-\end{enumerate}
-
-\textbf{\large{Remote Access:}}
-Sometimes you will not physically be at the HCal to access these computers. In this case if one wishes to use the computers one must log onto them remotely.
-
-\begin{enumerate}
-	\item To access these computers one must be on the JLab network. This can be logged into by typing ``ssh -Y your-JLab-user-name@login.jlab.org" and then entering your personal JLab password. 
-	\item Once on the JLab network these computers can be accessed by typing ``ssh -Y daq@encamsonne", ``ssh -Y  daq@intelsbshcal1", or ``ssh -Y  adaq@intelsbshcal2" depending on the computer one wishes to access. Enter the appropriate password when prompted and access to the computer will be granted.
-\end{enumerate}
-
-
-\chapter{Data Acquisition System}
-\label{ch:daq}
-\section{High Voltage}
-\label{sec:hv}
-
-\subsection{Overview}
-\label{ssec:hv_overview}
-
-The high voltage (HV) system for the HCal uses LeCroy 1461 N high voltage cards run off of a Raspberry Pi running the HV server located inside the HV crates themselves. There are two HV crates for the HCal and each provides voltage for 144 of the 288 PMTs. The HV cards have 12 channels each with the top crate containing 12 HV cards and the lower crate containing 13. The lower crate's extra card contains two HV channels for the paddle scintillators located above both halves of the detector. The upper crate runs server rpi20, and the lower crate rpi21. 
-
-\subsection{HV GUI}
-\label{ssec:gui}
-
-The HV crates and their individual channels are controlled via a graphical user interface (GUI) that can be run from a terminal. This GUI loads its configuration from a server run on the Raspberry Pi inside the crate. Before the GUI can be used the server must be running. To activate the server:
-
-\begin{enumerate}
-	\item Open a terminal on a computer that is on the same network as the HV server.
-	\item Log into the Raspberry Pi by typing ``ssh ***" in the terminal.
-	\item You will be prompted for the password. If you do not know the password ask someone who does as passwords cannot be shared electronically. 
-	\item Once logged in to the Raspberry Pi the server is started by going to the *** directory by typing ``cd ***" in the terminal. Then type ``./***" which will start the server running in that terminal.
-	\item To activate the GUI return to the computer on the same network as the crate that you plan to control the HV with and go to the slowc directory by typing ``cd /slowc***". Then activate the GUI by typing either ``./hvs ***" or if you wish to run only a single crate ``./hvs UPPER" or ``./hvs LOWER".
-	\item The GUI will then load each of the HV cards each with 12 individual channels. To turn on the HV so that individual channels can be powered click "HV ON" on the left side and the button will turn yellow.
-	\item To set an individual channel's HV enter the desired voltage for the channel in its "target voltage" column. Then to activate the channel click the check box in the "***" column. A check mark will appear and the voltage will begin ramping up. You can see the current voltage in the "current voltage" column.
-	\item Note: You can leave the channels checked as on and turn off the voltage with the button on the left hand side to deactivate all channels. The button will change from yellow to grey and all voltages will read zero after a few seconds. Then if the voltage is turned back on with the same button all channels with checked boxes will begin supplying voltages again. 
-\end{enumerate}
-
-\section{Cebaf Online Data Acquisition (CODA)}
-\label{sec:coda}
-
-\subsection{Overview}
-\label{ssec:coda_overview}
-
-The DAQ system is controlled by the Cebaf Online Data Acquisition (CODA) system. CODA is used to start and stop data collection runs. Data generated from the fADCs and F1TDCs is collected by CODA in the CODA data format and stored in the *** directory. This raw data file can later be decoded using the Hall A Analyzer which converts the raw data into ROOT files for analysis. The current version of CODA being used is CODA 2.7.2*** and it will be necessary to upgrade to CODA 3 before the SBS program begins.
-
-\subsection{Starting and Running CODA}
-\label{ssec:running_coda}
-
-\begin{enumerate}
-	\item Log into the DAQ PC, currently the daq account on enpcamsonne, as described in ***, and open a terminal in the /home/daq/ directory and type ``msqld" to start the database holding the CODA configurations? 
-	\item In two separate terminals log into ROCs 21 and 22 (CPUs on the crates holding the fADCs and F1TDCs) as described in \cref{sec:logging_on}. Then on ROC 22 in directory /home/adaq/ type ``.\textbackslash startroc22" and on ROC 21 directory /home/daq/ type ".\textbackslash startroc21" to start both ROCs. %In both terminals set the environment variables from the home directory *** by typing ``source setup\_enpcamsonne".  
-	\item Back on the DAQ PC in the /home/daq/ directory start CODA by typing ``.\textbackslash startcoda". After a few seconds four small colored windows will pop up followed by the main CODA GUI.
-	\item In the top left of the CODA GUI click ``Platform" then select ``Connect". 
-	\item Then push the button in the top left that looks like a wrench and screwdriver crossed that says ``Configure" when you hover it. In the center left of the CODA GUI there should be four rows that say ``ER21", ``EB21", ``ROC21", and ``ROC22". In their status columns the state should say ``configured" after a few seconds. At the bottom of the CODA GUI under the ``Message" column it should say ``Configure is started." and then ``"Configure succeeded". 
-	\item Next click on the floppy disk icon in the top left of the CODA GUI that says ``Download" when hovered. This button downloads the read-out lists (ROLs) for the fADCs and F1TDCs. After a few seconds the status column's rows should all read ``downloaded" and the message column should say ``Download is started." followed by``Download succeeded." perhaps with a few waiting messages in between.
-	\item To then start a run click button that looks like two right facing arrows (or triangles) that says ``Start" when hovered at the top of the CODA GUI. This will begin a data run.
-	\item A run can be stopped by clicking the square button at the top that says ``Stop" when hovered.\\
-	\\
-	Notes:
-	\item If changes are made to the ROLs they must be re-downloaded. Once a run is stopped click the button at the top that looks like two left facing arrows (or triangles) that says ``Reset" when hovered. After the system has reset then hit the ``Download" button again and resume running as usual.
-\end{enumerate}
-
-\chapter{Important Scripts}
-\label{ch:scripts}
-
-\section{Overview}
-\label{sec:scripts_overview}
-
-There are several important scripts used for creating analysis data files and analyzing the resultant data files. The most important of these are located on daq@enpcamsonne (see Section \cref{sec:logging_on}).
-
-\section{Replaying a Run}
-\label{sec:replay}
-
-After a CODA run is completed it creates a .dat datafile in the /home/daq/data/ directory containing the run's number. These data files must be replayed (decoded) such that the CODA data format can be translated into a ROOT file for analysis. This is done using the Hall A Analyzer.
-
-\begin{enumerate}
-	\item On daq@enpcamsonne go to the /home/daq/test\_fadc/ directory. 
-	\item The script that replays a CODA data file and produces a ROOT file is called. 
-\end{enumerate}
-
-\chapter{Schematics and Cable Maps}
-\label{ch:schematics}
-
-\section{Overview}
-\label{sec:schematics_overview}
-
-This section aggregates numerous schematics and cable maps for HCal. The actual cabling of the detector should closely mirror these maps, but please be aware that minor changes are occasionally implemented based on physical limitations or convenience. 
-
-\section{Cable Maps}
-\label{sec:cable_maps}
-
-The cabling scheme for the \hcal is designed such that all detector channels can be accessed at numerous points between the detector PMTs and where the final signals enter the DAQ electronics. The \hcal cable system can be broken into three groups based on whether the physics signals flow to the fADC250s, the F1TDCs, or the UVA-120 summing modules. This section describes how the signal from the \hcal detector flows through the front-end and DAQ side electronics on each of these three paths before being recorded by the individual DAQ modules. The red arrows in Figures \ref{fig:fe} and \ref{fig:daq} show the direction of these signal flows.\\ %Five racks hold the front-end and DAQ cabling and electronics and a diagrammatic layout of these racks is show in Figures \ref{fig:fe} and \ref{fig:daq}. The front-end racks are labelled RR1, RR2, and RR3. The electronics and cables in RR1 and RR3 are mirrored as each of these racks contains half of the \hcal channels. The DAQ side racks are RR4 and RR5. The DAQ side is connected to the front-end via 100 m*** long BNC cables running from RR2 to RR4. \\ 
-
-Beginning at the detector PMTs the physics signal can be traced to the fADC250s which make both energy and timing measurements. The analog signal exits the detector PMTs and enters the PS776 amplifiers at the base of RR1 and RR3 depending on from which half of the detector the signal originated. The PS776 amplifiers have dual outputs which each produce a 10$\times$ amplified analog signal. From one of these outputs the amplified physics signal flows to patch panels in the bottom of RR2 which connect to DAQ side patch panels at the base of RR4 via 100 m*** long BNC cables. Once emerging from RR4 on the DAQ side the signals flow into the fADC250s in RR5 and are recorded for analysis. The following list gives each component dedicated to processing the fADC signals in the order in which the signal passes through them:\\
-
-\begin{itemize}\itemsep6pt \parskip0pt \parsep0pt
-	\item 288 detector PMTs (192 of the PMTs are 12 stage 2'' Photonis XP2262 PMTs and 96 are 8 stage stage 2'' Photonis XP2282 PMTs).
-	\item 288 5 m***check BNC-LEMO RG58 A/U cables. 
-	\item 18 PS776 dual output 10$\times$ amplifiers in RR1 and RR3.
-	\item 288 2 m LEMO-BNC RG58 A/U cables. 
-	\item 5 BNC-BNC patch panels in RR2. 
-	\item 288 100 m*** BNC-BNC*** RG58 A/U cables. 
-	\item 5 BNC-BNC*** patch panels in RR4. 
-	\item 288 2 m BNC-LEMO RG58 A/U cables. 
-	\item 18 fADC250s in RR5.
-%	\item 288 5 m***check BNC-LEMO cables. Connect detector PMTs to amplifiers in RR1 and RR3.
-%	\item 18 PS776 dual output 10$\times$ amplifiers. Output signal to 
-%	\item 288 2 m LEMO-BNC cables. Connect the first amplifier outputs in RR1 and RR3 to patch panels in RR2.
-%	\item 5 BNC-BNC patch panels (RR2). Patch first amplifier outputs to 100 m* BNC cables.
-%	\item 288 100 m*** BNC-BNC*** cables. Connect front-end patch panels in RR2 to DAQ side patch panels in RR4.
-%	\item 5 BNC-BNC*** patch panels (RR4). Patch signal from long BNC cables to cables running to fADC250s.
-%	\item 288 2 m BNC-LEMO cables. Connect patch panels in RR4 to fADC250s in RR5.
-\end{itemize}
-
-The detector signals flow to the F1TDCs, which make timing measurements, as follows. An analog signal first exits the detector PMTs and flows into the PS776 10$\times$ amplifiers at the base of RR1 and RR3 depending on from which half of the detector the signal originated. Exiting the second of the two PS776 outputs the amplified analog signal travels to a 50-50 splitter panel with two sets of outputs. The halved signal then exits the first set of these outputs and travels to PS706 discriminators with low ($\approx 11 mV$) thresholds in RR2. This now NIM logic signal passes into BNC-BNC patch panels in RR2 and then over 100 m*** long BNC-BNC*** cables which connect to BNC-BNC*** patch panels in RR4. After leaving the patch panels the physics signals enter a second set of LeCroy 2313 discriminators which ensure the signal shape continues to have a sharp leading edge. The second set of discriminators translate the signal into an ECL signal which then flows into the F1TDCs over ribbon cables to be recorded. The following list gives each component dedicated to processing the F1TDC signals in the order in which the signal passes through them:\\
-
-\begin{itemize}\itemsep6pt \parskip0pt \parsep0pt
-	\item 288 detector PMTs (192 of the PMTs are 12 stage 2'' Photonis XP2262 PMTs and 96 are 8 stage stage 2'' Photonis XP2282 PMTs).
-	\item 288 5 m***check BNC-LEMO RG58 A/U cables. 
-	\item 18 PS776 dual output 10$\times$ amplifiers in RR1 and RR3.
-	\item 288 2 m LEMO-BNC RG58 A/U cables. 
-	\item 9 50-50 dual output splitter panels in RR1 and RR3. 
-	\item 288 2 m BNC-LEMO RG58 A/U cables.
-	\item 18 PS706 discriminators in RR2.
-	\item 288 2 m LEMO-BNC RG58 A/U cables.
-	\item 5 BNC-BNC patch panels in RR2.
-	\item 288 100 m*** BNC-BNC*** RG58 A/U cables. 
-	\item 5 BNC-BNC*** patch panels in RR4. 
-	\item 288 2m BNC ***(what cable types) cables.
-	\item 18 Lecroy 2313 discriminators in RR4.
-	\item 18 16 channel ribbon cables.
-	\item 5 F1TDCs in RR5. 
-%	\item 288 5 m***check BNC-LEMO cables. Connect detector PMTs to dual output front-end amplifiers in RR1 and RR3.
-%	\item 288 2 m LEMO-BNC cables. Connect the second amplifier outputs in RR1 and RR3 to splitter panels in RR1 and RR3.
-%	\item 9 50-50 dual output splitter panels in RR1 and RR3. Divide the signal in half with one set of outputs going to 2m BNC-LEMO cables.
-%	\item 288 2 m BNC-LEMO cables. Connect one set of splitter outputs to PS706 discriminators.
-%	\item 288 100 m*** BNC-BNC*** cables. Connect front-end patch panels in RR2 to DAQ side patch panels in RR4.
-\end{itemize}
-
-The third set of signals leading to the summing modules takes the following path. An analog signal first exits the detector PMTs and flows into the PS776 10$\times$ amplifiers at the base of RR1 and RR3 depending on from which half of the detector the signal originated. Exiting the second of the two PS776 outputs the amplified analog signal travels to a 50-50 splitter panel with two sets of outputs. The halved signal then exits the second set of these outputs and travels to to the UVA-120 summing modules which sum the analog signal of 16 PMTs for triggering and analysis purposes. The following list gives each component dedicated to processing the UVA-120 summing module signals in the order in which the signal passes through them:\\
-
-\begin{itemize}\itemsep6pt \parskip0pt \parsep0pt
-	\item 288 detector PMTs (192 of the PMTs are 12 stage 2'' Photonis XP2262 PMTs and 96 are 8 stage stage 2'' Photonis XP2282 PMTs).
-	\item 288 5 m***check BNC-LEMO RG58 A/U cables. 
-	\item 18 PS776 dual output 10$\times$ amplifiers in RR1 and RR3.
-	\item 288 2 m LEMO-BNC RG58 A/U cables. 
-	\item 9 50-50 dual output splitter panels in RR1 and RR3. 
-	\item 288 2 m BNC-LEMO RG58 A/U cables.
-	\item 18 summing modules***(better name? UVA?) in RR1 and RR3.
-\end{itemize}
-
-%The cabling scheme for HCal is designed such that all detector channels can be accessed at numerous points between the detector PMTs and where the final signals enter the DAQ electronics. The HCal cable system can be broken into three groups based on whether the physics signals flow to the fADC250s or the F1TDCs discussed in Section \ref{daq} or the summing modules discussed in Section \ref{electronics}. Five racks hold the front-end and DAQ cabling and electronics and a diagrammatic layout of these racks is show in Figures \ref{fig:fe} and \ref{fig:daq}. The front-end racks are labelled RR1, RR2, and RR3. The electronics and cables in RR1 and RR3 are mirrored as each of these racks contains half of the HCal channels. The DAQ side racks are RR4 and RR5. The DAQ side is connected to the front-end via 100 m*** long BNC cables running from RR2 to RR4. \\ 
-%
-%	\begin{figure}[!ht]
-%	\begin{center}
-%	\includegraphics[width=0.8\linewidth]{/home/skbarcus/JLab/SBS/HCal/Documents/NIM_Paper/pictures/HCal_FE.png}
-%	\end{center}
-%	\caption{
-%	{\bf{HCal Front-End Layout.}} The front-end consists of racks RR1, RR2, and RR3. Signal enters the front-end through the amplifiers at the bottoms of racks RR1 and RR3. RR1 and RR3 are mirrored and each handle half of the 288 HCal channels. The front-end is connected to the DAQ side via 100 m*** long BNC cables connecting RR2 to RR4.}
-%	\label{fig:fe}
-%	\end{figure}	
-%	
-%	\begin{figure}[!ht]
-%	\begin{center}
-%	\includegraphics[width=0.8\linewidth]{/home/skbarcus/JLab/SBS/HCal/Documents/NIM_Paper/pictures/HCal_DAQ.png}
-%	\end{center}
-%	\caption{
-%	{\bf{HCal DAQ Layout.}} The DAQ side consists of racks RR4 and RR5. Rack RR5 contains the fADC250s and F1TDCs into which the physics signal flows. The DAQ side is connected to the front-end via 100 m*** long BNC cables connecting RR4 to RR2.}
-%	\label{fig:daq}
-%	\end{figure}	
-%
-%Beginning at the detector PMTs the physics signal can be traced to the fADC250s, from which both energy and timing measurements can be made. The analog signal exits the detector PMTs and enters the Phillips Scientific 776 amplifiers at the base of RR1 and RR3 depending on from which half of the detector the signal originated. The PS776 amplifiers have dual outputs which each produce a 10$\times$ amplified analog signal. From one of these outputs the amplified physics signal flows to patch panels in the bottom of RR2 which connect to DAQ side patch panels at the base of RR4 via 100 m*** long BNC cables. Once emerging from RR4 on the DAQ side the signals flow into the fADC250s in RR5 and are recorded for analysis. The following list gives each component dedicated to processing the fADC signals in the order in which the signal passes through them:\\
-%
-%\begin{itemize}\itemsep6pt \parskip0pt \parsep0pt
-%	\item 288 detector PMTs (192 of the PMTs are 12 stage 2'' Photonis XP2262 PMTs and 96 are 8 stage stage 2'' Photonis XP2282 PMTs).
-%	\item 288 5 m***check BNC-LEMO cables. 
-%	\item 18 PS776 dual output 10$\times$ amplifiers in RR1 and RR3.
-%	\item 288 2 m LEMO-BNC cables. 
-%	\item 5 BNC-BNC patch panels in RR2. 
-%	\item 288 100 m*** BNC-BNC*** cables. 
-%	\item 5 BNC-BNC*** patch panels in RR4. 
-%	\item 288 2 m BNC-LEMO cables. 
-%	\item 18 fADC250s in RR5.
-%%	\item 288 5 m***check BNC-LEMO cables. Connect detector PMTs to amplifiers in RR1 and RR3.
-%%	\item 18 PS776 dual output 10$\times$ amplifiers. Output signal to 
-%%	\item 288 2 m LEMO-BNC cables. Connect the first amplifier outputs in RR1 and RR3 to patch panels in RR2.
-%%	\item 5 BNC-BNC patch panels (RR2). Patch first amplifier outputs to 100 m* BNC cables.
-%%	\item 288 100 m*** BNC-BNC*** cables. Connect front-end patch panels in RR2 to DAQ side patch panels in RR4.
-%%	\item 5 BNC-BNC*** patch panels (RR4). Patch signal from long BNC cables to cables running to fADC250s.
-%%	\item 288 2 m BNC-LEMO cables. Connect patch panels in RR4 to fADC250s in RR5.
-%\end{itemize}
-%
-%Timing information is derived from F1TDCs and flows through the front-end and DAQ side electronics in the following manner. An analog signal first exits the detector PMTs and flows into the Phillips Scientific 776 10$\times$ amplifiers at the base of RR1 and RR3 depending on from which half of the detector the signal originated. Exiting the second of the two PS776 outputs the amplified analog signal travels to a 50-50 splitter panel with two sets of outputs. The halved signal then exits the first set of these outputs and travels to Phillips Scientific 706 discriminators with low ($\approx 11 mV$) thresholds in RR2. This now NIM logic signal passes into patch panels in RR2 and then over 100 m*** long BNC-BNC*** cables which connect to patch panels in RR4. After leaving the patch panels the physics signals enter a second set of LeCroy 2313 discriminators which ensure the signal shape continues to have a sharp leading edge. The second set of discriminators translate the signal into an ECL signal which then flows into the F1TDCs to be recorded. The following list gives each component dedicated to processing the F1TDC signals in the order in which the signal passes through them:\\
-%
-%\begin{itemize}\itemsep6pt \parskip0pt \parsep0pt
-%	\item 288 detector PMTs (192 of the PMTs are 12 stage 2'' Photonis XP2262 PMTs and 96 are 8 stage stage 2'' Photonis XP2282 PMTs).
-%	\item 288 5 m***check BNC-LEMO cables. 
-%	\item 18 PS776 dual output 10$\times$ amplifiers in RR1 and RR3.
-%	\item 288 2 m LEMO-BNC cables. 
-%	\item 9 50-50 dual output splitter panels in RR1 and RR3. 
-%	\item 288 2 m BNC-LEMO cables.
-%	\item 18 PS706 discriminators in RR2.
-%	\item 288 2 m LEMO-BNC cables.
-%	\item 5 BNC-BNC patch panels in RR2.
-%	\item 288 100 m*** BNC-BNC*** cables. 
-%	\item 5 BNC-BNC*** patch panels in RR4. 
-%	\item 288 2m BNC cables.
-%	\item 18 Lecroy 2313 discriminators in RR4.
-%	\item 18 16 channel ribbon cables.
-%	\item 5 F1TDCs in RR5. 
-%%	\item 288 5 m***check BNC-LEMO cables. Connect detector PMTs to dual output front-end amplifiers in RR1 and RR3.
-%%	\item 288 2 m LEMO-BNC cables. Connect the second amplifier outputs in RR1 and RR3 to splitter panels in RR1 and RR3.
-%%	\item 9 50-50 dual output splitter panels in RR1 and RR3. Divide the signal in half with one set of outputs going to 2m BNC-LEMO cables.
-%%	\item 288 2 m BNC-LEMO cables. Connect one set of splitter outputs to PS706 discriminators.
-%%	\item 288 100 m*** BNC-BNC*** cables. Connect front-end patch panels in RR2 to DAQ side patch panels in RR4.
-%\end{itemize}
-%
-%The third set of signals leading to the summing modules takes the following path. An analog signal first exits the detector PMTs and flows into the Phillips Scientific 776 10$\times$ amplifiers at the base of RR1 and RR3 depending on from which half of the detector the signal originated. Exiting the second of the two PS776 outputs the amplified analog signal travels to a 50-50 splitter panel with two sets of outputs. The halved signal then exits the second set of these outputs and travels to to the summing modules which sum the analog signal of 16 PMTs for triggering and analysis purposes. The following list gives each component dedicated to processing the summing module signals in the order in which the signal passes through them:\\
-%
-%\begin{itemize}\itemsep6pt \parskip0pt \parsep0pt
-%	\item 288 detector PMTs (192 of the PMTs are 12 stage 2'' Photonis XP2262 PMTs and 96 are 8 stage stage 2'' Photonis XP2282 PMTs).
-%	\item 288 5 m***check BNC-LEMO cables. 
-%	\item 18 PS776 dual output 10$\times$ amplifiers in RR1 and RR3.
-%	\item 288 2 m LEMO-BNC cables. 
-%	\item 9 50-50 dual output splitter panels in RR1 and RR3. 
-%	\item 288 2 m BNC-LEMO cables.
-%	\item 18 summing modules***(better name? UVA?) in RR1 and RR3.
-%\end{itemize}
 
 \bibliographystyle{plain}
 \bibliography{mybibfile}

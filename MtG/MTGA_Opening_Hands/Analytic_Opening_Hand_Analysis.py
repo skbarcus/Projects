@@ -181,7 +181,7 @@ temp1 = []
 temp2 = []
 p_play = 0
 p_draw = 0
-for z in range(minlands+1,maxlands):
+for z in range(minlands,maxlands+1):#(minlands+1,maxlands)
     curve_probs_temp.clear()
     for i in range(1,4):
         temp1.clear()
@@ -261,7 +261,7 @@ for i in range(0,len(curve_rows)):
 for i in range(0,len(curve_cols)):
     curve_col_colors.append("silver")
 
-for i in range(0,5):
+for i in range(0,7):
     fig, ax = plt.subplots(figsize=(16,12))
     fig.patch.set_visible(False)
     ax.axis('off')
