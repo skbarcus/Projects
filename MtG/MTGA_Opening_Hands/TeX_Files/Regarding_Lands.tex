@@ -138,8 +138,40 @@ The most fundamental statistic governing the number of lands to put in a deck is
 	\centering
 	\centerline{\includegraphics[width=1.5\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_Opening_Land_Percentages_Clean.png}}
 	\caption{
-	{\bf{Average Opening Hand Land Percentages.}} .}
+	{\bf{Average Opening Hand Land Percentages.}} This table gives the percentage chance of drawing between zero and seven lands in an opening hand of a 40 card limited deck. Odds are given for 14 to 20 lands in a deck, as well as for a traditional Magic opening hand draw and an MTGA Bo1 draw.}
 	\label{fig:opening_hand_percentages}
+	\end{figure}	
+	
+Here we see right away why 17 lands is considered the default number of lands for a 40 card limited deck to run when using the traditional opening hand draw. Putting 17 lands in your limited deck gives you the highest chance (32.30\%) of having three lands in your opening hand. Having three lands in your opener guarantees you hit the extremely important land drops on turns one to three. However, look at what happens when we use an MTGA Bo1 opening hand. Suddenly our odds of having three lands in our opener with 17 lands in the deck is 54.16\%. That's an enormous increase! What's going on here?
+
+To understand why the opening hand land odds changed so much let's plot a histogram of the chances of drawing between zero and seven lands in your opening hand for a traditional draw and a MTGA Bo1 draw as in Figure \ref{fig:traditional_vs_bo1_17}. The effect of the MTGA Bo1 draw is that it `tightened up' the distribution centered around drawing three lands in your opener. Because the Bo1 shuffler draws two hands and keeps the one with the land ratio closest to that of your deck you will draw more three land hands. This decreases the likelihood of drawing a land ratio in your opener that is very different than the land ratio of your deck. You were already less likely to draw a six land opener than a three land opener with a traditional draw, but now if you draw a six land opener (85.8\% lands) as one of your Bo1 opening hands then the second hand will be chosen instead unless it has zero (0\% lands), six (85.8\% lands) or seven lands (100\% lands) in it. This is because these are the only land ratios further away from that of your deck (42.5\% lands). The overall effect is to greatly decrease the number of opening hands that have land ratios much different than your overall deck. In fact, drawing a seven land opener for a 40 card limited deck with 17 lands in MTGA Bo1 games only happens one in 918,984 times!
+
+ 	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/17_Lands_Normal_vs_Bo1.png}}
+	\caption{
+	{\bf{Opening Hand Land Percentages Traditional Opening Draw vs. MTGA Bo1 Draw.}} Odds are given for a 40 card limited deck with 17 Lands.}
+	\label{fig:traditional_vs_bo1_17}
+	\end{figure}	
+	
+Let's take this a step further and see how the odds of drawing between zero and seven lands in an opening hand vary for 40 card limited decks with 14 to 20 lands in them. First we'll plot\footnote{Plots were made using Seaborn's kdeplot function and adjusting the bandwidth parameter until the distributions were clear.} the distributions for only traditional opening hand draws as in Figure \ref{fig:traditional_distributions}. Notice how the most frequent number of lands in an opening hand smoothly increases from 14 land decks up to 20 land decks. The bumps on the plot are due to the discrete nature of drawing cards. You can only draw an integer number of lands in an opening hand (i.e. you cannot draw 2.5 lands in a hand). As we saw in the table the distribution with the highest peak at three lands in an opening hand is a deck with 17 lands (red curve).
+
+ 	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Distribution_of_Lands_Normal_Opener_kdeplot_14-20.png}}
+	\caption{
+	{\bf{Opening Hand Land Percentages Using a Traditional Draw.}} Odds are given for a 40 card limited deck with between 14 and 20 Lands.}
+	\label{fig:traditional_distributions}
+	\end{figure}	
+
+This all seems rather intuitive so far. If we start with only 14 lands in a deck and begin adding lands the average number of lands in our starting hand will increase in a relatively smooth fashion. But what do these distributions look like for the MTGA Bo1 opening hands which can are given in \ref{fig:bo1_distributions}? 
+
+ 	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Distribution_of_Lands_MTGA_Bo1_Opener_kdeplot_14-20.png}}
+	\caption{
+	{\bf{Opening Hand Land Percentages Using an MTGA Bo1 Draw.}} Odds are given for a 40 card limited deck with between 14 and 20 Lands.}
+	\label{fig:traditional_distributions}
 	\end{figure}	
 
 \bibliographystyle{plain}
