@@ -26,6 +26,7 @@
 \usepackage{xspace}    %Guesses if a space is needed after the custom command.
 \usepackage{amsmath}   %Use \text in math mode.
 \usepackage{makecell}  %Allows for the making of cells in tables.
+\usepackage{caption}   %Lets me call a figure a table.
 
 \newcommand{\hcal}{HCAL-J\xspace}
 \newcommand{\jlab}{Jefferson Lab\xspace}
@@ -67,7 +68,7 @@
 	\begin{minipage}{0.5\textwidth}
 		\begin{center}
 			\large
-			\textit{Contact Person:}
+			%\textit{Contact Person:}
 			Scott \textsc{Barcus}\footnote{email: scottkbarcus@gmail.com} \newline
 		\end{center}
 	\end{minipage}
@@ -132,12 +133,12 @@ The values given in the following tables and plots are analytic\footnote{Tables 
 \section{Opening Hand Land Statistics}
 \label{opener}
 
-The most fundamental statistic governing the number of lands to put in a deck is the average number of lands you can expect to draw in an opening hand. Figure \ref{fig:opening_hand_percentages} shows the percentage of seven card hands that will have a given number of lands in them for 40 card limited deck. The values are given for decks with between 14 and 20 lands, as well as for traditional draws and Bo1 draws.  
+The most fundamental statistic governing the number of lands to put in a deck is the average number of lands you can expect to draw in an opening hand. Table \ref{fig:opening_hand_percentages} shows the percentage of seven card hands that will have a given number of lands in them for 40 card limited deck. The values are given for decks with between 14 and 20 lands, as well as for traditional draws and Bo1 draws.  
 
 	\begin{figure}[!ht]
 	\centering
 	\centerline{\includegraphics[width=1.5\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_Opening_Land_Percentages_Clean.png}}
-	\caption{
+	\captionof{table}{
 	{\bf{Average Opening Hand Land Percentages.}} This table gives the percentage chance of drawing between zero and seven lands in an opening hand of a 40 card limited deck. Odds are given for 14 to 20 lands in a deck, as well as for a traditional Magic opening hand draw and an MTGA Bo1 draw.}
 	\label{fig:opening_hand_percentages}
 	\end{figure}	
@@ -164,15 +165,100 @@ Let's take this a step further and see how the odds of drawing between zero and 
 	\label{fig:traditional_distributions}
 	\end{figure}	
 
-This all seems rather intuitive so far. If we start with only 14 lands in a deck and begin adding lands the average number of lands in our starting hand will increase in a relatively smooth fashion. But what do these distributions look like for the MTGA Bo1 opening hands which can are given in \ref{fig:bo1_distributions}? 
+This all seems rather intuitive so far. If we start with only 14 lands in a deck and begin adding lands the average number of lands in our starting hand will increase in a relatively smooth fashion. Now let's see what these distributions look like for the MTGA Bo1 opening hands which are shown in Figure \ref{fig:bo1_distributions}? 
 
  	\begin{figure}[!ht]
 	\centering
 	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Distribution_of_Lands_MTGA_Bo1_Opener_kdeplot_14-20.png}}
 	\caption{
 	{\bf{Opening Hand Land Percentages Using an MTGA Bo1 Draw.}} Odds are given for a 40 card limited deck with between 14 and 20 Lands.}
-	\label{fig:traditional_distributions}
+	\label{fig:bo1_distributions}
 	\end{figure}	
+	
+Figure \ref{fig:bo1_distributions} has a strikingly different distribution than Figure \ref{fig:traditional_distributions}. Firstly, the distributions for each opening hand are much tighter than in the case of a traditional opening hand draw. This is a result of the decreased width of the distributions based on the decreased likelihood of drawing an opening hand with a land ratio that differs significantly from the land ratio of the overall deck (\ref{fig:traditional_vs_bo1_17}). 
+
+Secondly, we no longer see a smooth transition of the land distribution of the opening hand from 14 lands in the deck up to 20 lands. What we see is three clearly separately grouped distributions: one for 14 lands, one for 15-19 lands, and one for 20 lands. Why do these distributions not smoothly flow into one another as the did for traditional opening hand draws? The answer lies in what number of lands in the opening hand is closest to the land ratio of the deck overall. 
+
+A 14 land 40 card limited deck has a land percentage of 35\% (14/40). So the number of lands in an opening hand that is closest to a deck that is 35\% land is 2.45 lands (0.35$\times$7). 2.45 lands rounds down to two lands so the MTGA Bo1 draw will pick two land openers as the best match for a 14 land deck. The MTGA Bo1 draw would view the ideal number of lands in an opener for a 15 land deck as 2.625 lands (0.375$\times$7), for a 16 land deck as 2.8 lands (0.4$\times$7), for a 17 land deck as 2.975 (0.425$\times$7), for an 18 land deck as 3.15 lands (0.45$\times$7), and for a 19 land deck as 3.325 lands (0.475$\times$7). For 15-19 lands in a 40 card deck the MTGA Bo1 draw will round to three lands in the opening hand as ideal. Finally, for 20 lands the deck the ideal lands in the opener to the MTGA Bo1 draw is 3.5 lands (0.5$\times$7) which rounds up to four lands in the opener. This is what creates the three distinct groupings in Figure \ref{fig:bo1_distributions}. The overall effect of the MTGA Bo1 shuffler is to greatly increase the probability of drawing a number of lands in your opener closest to the land ratio of your deck. 
+
+Most decks have an acceptable range for the number of lands they draw in their opener. For example, a many limited decks could easily consider keeping between two and four lands in its opener. Once you know your deck and its game plan you will have an idea of how many land would be ideal in your opener as well as how many lands you would be fairly happy to accept. Table \ref{fig:combined} gives the probabilities of drawing a given range of lands in your opener. If you know that your deck would generally be able to consider keeping a hand with say 2-4 lands in it opener, this table will give you the probabilities of drawing an opener with a number of lands in the given `acceptable' range.
+
+ 	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=0.7\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_Combined_Opening_Land_Percentages_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Drawing a Given Range of Lands in and Opening Hand.}} This table gives the probabilities of drawing . `\% 2-3 Lands' means the percentage chance of drawing either two or three lands in your opener. `14 Lands' means a 40 card limited deck with 14 lands using a traditional opening draw, and `14 Lands Bo1' is the same except for using the MTGA Bo1 opening draw.}
+	\label{fig:combined}
+	\end{figure}	
+
+\section{Making Land Drops on Curve}
+\label{curve}
+
+Now we know the probability of drawing zero to seven lands in our opener for traditional draws and MTGA Bo1 draws. We also know that the MTGA Bo1 draws significantly alter the probabilities of having a given number of lands in an opener. This helps us to decide how many lands to run in a 40 card limited deck. But just maximizing your chances of drawing say three lands in your opener is by no means the whole story. Why do we want three lands in our opener anyway? The reason is that we want to hit our critical land drops on curve (i.e. two lands on turn two, three lands on turn three, etc.). Different decks will value hitting their land drops on curve differently. For example, an aggro deck might `need' two lands on turn two but could miss three lands on turn three and still function. Whereas, a control deck may `need' three lands on turn three or four lands on turn four to be functional. 
+
+We can put the perfect number of lands in our deck, but no matter how perfect its land distribution you are often not going to draw the exact number of lands you desire in your opener. Once you draw a two land opener you then have to decide whether or not to keep that hand. One of the biggest factors in the decision to keep or mulligan a hand is how likely you are to make your land drops on curve. There are of course many other considerations such as the power level of the cards in your opener, their converted mana cost (CMC), and how well the cards fit your deck's game plan to name a few, but we will limit this analysis to focusing on lands and again remind the reader that everything in magic is contextual.
+
+One further consideration when calculating the probabilities of a deck hitting its land drops on curve is whether that deck's player is on the play or draw. When a player goes first in a standard limited game that player does not draw a card on their first turn, whereas the player who goes second does. This means that if you are on the play you have one fewer draw to find a land to hit you land drops on curve. 
+
+With that said, the next portion of this document gives tables of the probabilities of making your land drops on curve based on the number of lands in your deck, the number of lands in your opener, and whether or not you are on the play or draw. Table \ref{fig:14_curve} shows the probabilities for a 14 land limited deck, Table \ref{fig:15_curve} shows the probabilities for a 15 land limited deck, Table \ref{fig:16_curve} shows the probabilities for a 16 land limited deck, Table \ref{fig:17_curve} shows the probabilities for a 17 land limited deck, Table \ref{fig:18_curve} shows the probabilities for a 18 land limited deck, Table \ref{fig:19_curve} shows the probabilities for a 19 land limited deck, and Table \ref{fig:20_curve} shows the probabilities for a 20 land limited deck. Once you have evaluated how important it is for your deck to hit each land drop on curve, you can use the following tables to find the probabilities of making those land drops after drawing your opening hand. 
+
+ 	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L14_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 14 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 14 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:14_curve}
+	\end{figure}	
+	
+	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L15_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 15 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 15 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:15_curve}
+	\end{figure}	
+	
+	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L16_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 16 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 16 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:16_curve}
+	\end{figure}	
+	
+	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L17_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 17 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 17 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:17_curve}
+	\end{figure}	
+	
+	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L18_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 18 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 18 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:18_curve}
+	\end{figure}	
+	
+	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L19_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 19 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 19 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:19_curve}
+	\end{figure}	
+	
+	\begin{figure}[!ht]
+	\centering
+	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Analytic_X_Lands_on_X_D40L20_Clean.png}}
+	\captionof{table}{
+	{\bf{Probabilities of Hitting Land Drops on Curve for a 20 Land Limited Deck.}} Probabilities are given for a 40 card limited deck with 20 lands. `\% 2 Lands on 2' means the percentage chance of having drawn two lands total on turn two. `2 Lands on the Draw' means that the opening seven card hand contains two lands and the player is on the draw.}
+	\label{fig:20_curve}
+	\end{figure}	
+	
+\section{Should I Run Fewer Lands in MTGA Bo1 Games?}
 
 \bibliographystyle{plain}
 \bibliography{mybibfile}
