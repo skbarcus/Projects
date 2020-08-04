@@ -27,6 +27,7 @@
 \usepackage{amsmath}   %Use \text in math mode.
 \usepackage{makecell}  %Allows for the making of cells in tables.
 \usepackage{caption}   %Lets me call a figure a table.
+\usepackage[toc,page]{appendix}
 
 \newcommand{\hcal}{HCAL-J\xspace}
 \newcommand{\jlab}{Jefferson Lab\xspace}
@@ -69,7 +70,7 @@
 		\begin{center}
 			\large
 			%\textit{Contact Person:}
-			Scott \textsc{Barcus}\footnote{email: scottkbarcus@gmail.com} \newline
+			\textsc{Scott Barcus}\footnote{email: scottkbarcus@gmail.com} \newline
 		\end{center}
 	\end{minipage}
 	
@@ -110,29 +111,29 @@
 \chapter{Introduction: Limited Land Counts}
 \label{intro}
 
-Everyone who has ever shuffled up a 40 card limited deck has been confronted with the same question. How many lands should I run? And every time they draw from that deck, another question arises. Should I keep this hand? As with most things in Magic the Gathering, the answer to these questions is generally, ``It depends."
+Everyone who has ever shuffled up a 40 card limited deck has been confronted with the same question: How many lands should I run? And every time they draw from that deck, another question arises: Should I keep this hand? As with most things in Magic the Gathering, the answer to these questions is ``It depends."
 
-Throughout Magic's history it has generally come to be accepted that the default number of lands in a 40 card limited deck is 17. But where did the number 17 come from? Why is that the `optimal' number of lands. The answer of course, is that it is not always the optimal number of lands to run. Slower, more powerful limited formats, may incentivize playing more than 17 lands. Whereas, fast formats, where board early presence dominates, may incentivize playing fewer than 17 lands. Similarly, a player with a classical `control' deck may wish to run more than 17 lands to be certain to hit all of their land drops for their powerful, but generally more expensive, spells. A player with a lower curve `aggro' deck, may instead want to run fewer than 17 lands. 
+Throughout Magic's history it has come to be accepted that the default number of lands to put in a 40 card limited deck is 17. But where did the number 17 come from? Why is that the `optimal' number of lands. The answer of course, is that it is not always the optimal number of lands to run. Slower, more powerful limited formats, may incentivize playing more than 17 lands. Whereas, fast formats, where early board presence dominates, may incentivize playing fewer than 17 lands. Similarly, a player with a classical `control' deck may wish to run more than 17 lands to hit their land drops on curve\footnote{Hitting land drops `on curve' means to have X lands in play on turn X. e.g. Three lands on turn three or four lands on turn four.} for their powerful, but often more expensive, spells. A player with a lower curve `aggro' deck may instead want to run fewer than 17 lands, so as to not draw too many lands and not enough spells. 
 
-Once you have decided how many lands your limited deck should run you draw your opening seven and see just a single land. Conventional Magic wisdom is that you generally mulligan one-landers, but to be the best limited player one can, one must be able to tell when conventional heuristics are wrong. Maybe you have two strong two drops in your agrro deck's one land opening hand and are on the play. What if you are on the draw? Maybe your control deck must hit its first four or five land drops on curve to be competitive. Can you keep a two land opener on the draw? 
+Now imagine you have already decided how many lands your limited deck should run. You draw your opening seven card hand and see just a single land. Conventional Magic wisdom is that you generally mulligan\footnote{To mulligan a starting hand you shuffle the seven cards you drew back into your deck and draw a new hand with six cards. Every time you mulligan thereafter you draw one fewer card for your starting hand.} one-landers, but to be the best limited player you can, you must be able to tell when conventional heuristics like this are wrong. Maybe you have two strong two drops in your aggro deck's one land opening hand and are on the play. What if you are on the draw? Then should you keep the one land opener\footnote{`Opener' refers to a player's starting hand.}? Maybe your control deck must hit its first four or five land drops on curve to be competitive. Can you keep a two land opener on the draw? 
 
-To answer these questions you need to know your deck and how it is trying to win. You need to know how your game plan influences the number of lands you want to draw and when you want to draw them. No amount of tables and graphs can replace the hard-won experience earned from slinging spells against clever opponents. This document contains the statistics governing the answers to many of the above questions. This document cannot, however, answer these questions for you. Instead this document aims to give you the foundational statistical tools you need to make informed decisions regarding lands in limited.
+To answer these questions you need to know your deck's game plan (i.e. How is it trying to win?). Then you need to know how your deck's game plan influences the number of lands you want to draw, and when you want to draw them. No amount of statistics, tables, and graphs can replace the hard-won experience earned from slinging spells against clever opponents. This document contains the statistics governing the answers to many of the above questions. This document cannot, however, answer these questions for you. Instead this document aims to give you the foundational statistical tools you need to make informed decisions regarding lands in limited.
 
 \section{The MTGA Best of One Shuffler}
 \label{sec:computers_overview}
 
-The number of people playing MtG digitally has greatly increased with the release of Magic the Gathering Arena. With the advent of MTGA came a new emphasis on best-of-one (Bo1) games. For these MTGA Bo1 games, Wizard's introduced the Bo1 shuffler to reduce the number of non-interactive games. Unlike in traditional Bo3 games, MTGA Bo1 games draws two opening seven card hands from your deck when a game begins. The Bo1 shuffler then calculates which of these two hands to keep based on which of the hands has a land ratio closest to that of your deck overall. MTGA then presents you with the hand with the closer land ratio to that of your deck as your opening hand. (Note: You never see the other hand.)
+The number of people playing MtG digitally has greatly increased with the release of Magic the Gathering Arena. With the advent of MTGA came a new emphasis on best-of-one (Bo1) games. For these MTGA Bo1 games, Wizards introduced the Bo1 shuffler to reduce the number of non-interactive games. Unlike in traditional Bo3 games, MTGA Bo1 games draw two opening seven card hands from your deck when a game begins. The MTGA Bo1 shuffler then calculates the ratio of lands in each of those hands and presents you with the hand that has a land ratio closest to that of your deck overall. (Note: You never see the other hand.)
 
-For example, if we have a 40 card limited deck with 17 lands in it our deck is 42.5\% (17/40) lands. Now assume the Bo1 shuffler draws one hand with two lands and five nonlands and one hand with three lands and four nonlands. The first hand is 28.6\% (2/7) lands and the second hand is 42.9\% (3/7) lands. In this case the Bo1 shuffler will select the second hand with three lands in it because 42.9\% lands is closer to the deck's land ratio of 42.5\% than the two land hand's 28.6\%. 
+For example, if we have a 40 card limited deck with 17 lands in it our deck is 42.5\% (17/40) lands. Now assume the Bo1 shuffler draws one hand with two lands and five nonlands and one hand with three lands and four nonlands. The first hand is 28.6\% (2/7) lands and the second hand is 42.9\% (3/7) lands. In this case the MTGA Bo1 shuffler will select the second hand with three lands in it because 42.9\% lands is closer to the deck's land ratio of 42.5\% than the two land hand's 28.6\%. 
 
-The theory behind the Bo1 shuffler is that you will have more opening hands closer to your deck's land percentage. This greatly reduces the variance in opening hands, which leads to more keepable opening hands, and hopefully more fun interactive games of Magic. This has led to the belief among many players that it is better to default to playing 16 lands in limited when playing Bo1 games. 
+The theory behind the Bo1 shuffler is that you will have more opening hands closer to your deck's land ratio. This greatly reduces the variance in opening hands, which leads to more keepable opening hands and hopefully more fun interactive games of Magic. This has led to the belief among many players that it is better to default to playing 16 lands in limited when playing MTGA Bo1 games. 
 
-The argument goes that running 17 lands in a 40 card deck leads to drawing more lands over the whole game than desired (flooding). The traditional reason to run 17 lands in limited is for color considerations and to make certain that one hits one's important land drops on curve (i.e. having three lands on turn three). But if the Bo1 shuffler causes us to draw more three land opening hands, even with only 16 lands in a deck, then the risk of not hitting land drops on curve is greatly reduced, and one can play fewer lands to prevent late game flood. This document will present statistics for Bo1 opening hands as well as traditional opening hands so that readers can make an informed decision when deciding how many lands to run.
+The argument goes that running 17 lands in a 40 card deck leads to drawing more lands over the whole game than desired (`flooding'). The traditional reason to run 17 lands in limited is for color considerations and to make certain that you hit your important land drops on curve. But if the Bo1 shuffler causes us to draw more three land opening hands, even with only 16 lands in a deck, then the risk of not hitting land drops on curve is greatly reduced, and you can play fewer lands to reduce flooding. This document will present statistics for Bo1 opening hands as well as traditional opening hands so that readers can make an informed decision when deciding how many lands to run.
 
 \chapter{Results and Analysis}
 \label{results}
 
-The values given in the following tables and plots are analytic\footnote{Tables and plots were produced with Python, SciPi, NumPy, Matplotlib, and Seaborn.}, however the opening hand alnd percentages were cross checked against a Monte Carlo simulation as a sanity check. The two methods were found to be in good agreement. When using these results remember, every decision you make must be made with the composition of your deck in mind. Only when you understand the game plan of your deck can statistics help you to make an informed decision.
+The values given in the following tables and plots\footnote{Tables and plots were produced with Python, SciPi, NumPy, Matplotlib, and Seaborn.} are analytic\footnote{The values are calculated exactly and rounded to two decimal places. However, the opening hand land percentages were cross checked against a Monte Carlo simulation as a sanity check. The two methods were found to be in good agreement.} and were calculated using the hypergeometric function in scipy.stats.  %When using these results remember, every decision you make must be made with the composition of your deck in mind. Only when you understand the game plan of your deck can statistics help you to make an informed decision.
 
 \section{Opening Hand Land Statistics}
 \label{opener}
@@ -164,8 +165,8 @@ Let's take this a step further and see how the odds of drawing between zero and 
  	\begin{figure}[!ht]
 	\centering
 	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Distribution_of_Lands_Normal_Opener_kdeplot_14-20.png}}
-	\caption[\bf{Opening Hand Land Percentages Using a Traditional Draw.}]{
-	{\bf{Opening Hand Land Percentages Using a Traditional Draw.}} Odds are given for a 40 card limited deck with between 14 and 20 Lands.}
+	\caption[\bf{Opening Hand Land Distribution Using a Traditional Draw.}]{
+	{\bf{Opening Hand Land Distribution Using a Traditional Draw.}} Probabilities are given for a 40 card limited deck with between 14 and 20 Lands.}
 	\label{fig:traditional_distributions}
 	\end{figure}	
 
@@ -174,8 +175,8 @@ This all seems rather intuitive so far. If we start with only 14 lands in a deck
  	\begin{figure}[!ht]
 	\centering
 	\centerline{\includegraphics[width=1.\linewidth]{/home/skbarcus/Projects/MtG/MTGA_Opening_Hands/Pictures/Distribution_of_Lands_MTGA_Bo1_Opener_kdeplot_14-20.png}}
-	\caption[\bf{Opening Hand Land Percentages Using an MTGA Bo1 Draw.}]{
-	{\bf{Opening Hand Land Percentages Using an MTGA Bo1 Draw.}} Odds are given for a 40 card limited deck with between 14 and 20 Lands.}
+	\caption[\bf{Opening Hand Land Distribution Using an MTGA Bo1 Draw.}]{
+	{\bf{Opening Hand Land Distribution Using an MTGA Bo1 Draw.}} Probabilities are given for a 40 card limited deck with between 14 and 20 Lands.}
 	\label{fig:bo1_distributions}
 	\end{figure}	
 	
@@ -312,9 +313,17 @@ Next time you miss your third land drop on curve, instead of complaining about h
 
 Happy spellslinging!
 
-\section{About the Author}
+%\begin{appendix}
+\appendix
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+%\appendixpage
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\subsection{About the Author}
 
 Scott Barcus is an experimental nuclear physicist at the Thomas Jeffereson National Accelerator Facility in Virginia, where he builds particle detectors and studies particle physics using the CEBAF electron accelerator. Scott has been an avid MtG player since the original Zendikar block where he desperately tried to make Echo Mage into Traumatize work. (He swears he did it at least once and that it was ``so sweet".) These days he mostly plays limited, where he likes nothing more than to win an attrition war through incremental advantage and crushing inevitability. (He reminisces fondly on looping Devious Cover-Ups in Guilds of Ravnica.)  
+
+%\end{appendix}
 
 \bibliographystyle{plain}
 \bibliography{mybibfile}
